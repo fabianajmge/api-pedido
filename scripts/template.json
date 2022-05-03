@@ -22,7 +22,7 @@
             "logConfiguration": {
                 "logDriver": "awslogs",
                 "options": {
-                    "awslogs-region": "us-east-1",
+                    "awslogs-region": "ca-central-1",
                     "awslogs-stream-prefix": "test",
                     "awslogs-group": "/ecs/jenkins-pedido-test"
                 }
