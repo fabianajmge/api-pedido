@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  aplicacao:
+    image: githubjenkins
+    restart: always
+    ports: 
+      - "8084:8080"
+    container_name: githubjenkins

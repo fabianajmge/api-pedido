@@ -1,5 +1,7 @@
-FROM openjdk:8-jdk-alpine
-VOLUME /tmp
-ARG JAR_FILE=target/pederapido-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} pederapido-0.0.1-SNAPSHOT.jar
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Dserver.port=8080 -Djava.security.egd=file:/dev/./urandom -jar /hepederapido-0.0.1-SNAPSHOT.jar"]
+FROM maven:3.6.0-jdk-11-slim AS build
+COPY . ./
+RUN mvn clean
+RUN mvn package
+FROM adoptopenjdk/openjdk11:jdk-11.0.9.1_1
+COPY --from=build /target/*.jar pedido-pr.jar
+ENTRYPOINT ["java","-jar","pedido-pr.jar"]

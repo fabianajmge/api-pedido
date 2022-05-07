@@ -4,9 +4,6 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 bin/
-.mvn/
-mvnw
-mvnw.cmd
 
 ### STS ###
 .apt_generated
