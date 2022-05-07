@@ -14,7 +14,7 @@ import com.pederapido.pederapido.repository.ItemCardapioRepository;
 import com.pederapido.pederapido.repository.RestauranteRepository;
 
 @RestController
-@RequestMapping(value = "/cardapio")
+@RequestMapping(value = "/cardapio1")
 public class CardapioController {
 	
 	@Autowired
