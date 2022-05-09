@@ -14,7 +14,7 @@ import com.pederapido.pederapido.repository.ItemCardapioRepository;
 import com.pederapido.pederapido.repository.RestauranteRepository;
 
 @RestController
-@RequestMapping(value = "/cardapio1")
+@RequestMapping(value = "/cardapio")
 public class CardapioController {
 	
 	@Autowired
@@ -25,7 +25,6 @@ public class CardapioController {
 
 	@GetMapping(value = "/{restauranteId}")
     public List<ItemCardapio> getCardapio(@PathVariable Long restauranteId){
-		// colocar tratamento de exceção
 		Restaurante restaurante = restauranteRepository.findById(restauranteId).get();
         return cardapioRepository.findByRestaurante(restaurante);
     }

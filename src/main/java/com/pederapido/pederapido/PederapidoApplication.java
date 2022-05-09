@@ -1,5 +1,7 @@
 package com.pederapido.pederapido;
 
+import static com.nimbusds.jose.JWSAlgorithm.RS256;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -17,8 +19,6 @@ import com.nimbusds.jose.util.ResourceRetriever;
 import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import com.pederapido.pederapido.config.JwtConfiguration;
-
-import static com.nimbusds.jose.JWSAlgorithm.RS256;
 
 @SpringBootApplication
 public class PederapidoApplication {
