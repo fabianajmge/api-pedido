@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum StatusPedido {
+public enum Status {
 	
-	ABERTO(1), EM_PREPARACAO(2), PREPARO_FINALIZADO(3);
+	ATIVO(1), DESATIVADO(2);
 	
 	private final int value;
+
 }

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,14 +33,23 @@ public class ItemCardapio {
 	
 	private BigDecimal preco;
 	
+	@Enumerated(EnumType.ORDINAL)
 	private TipoItem tipo;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_restaurante")
 	@JsonIgnore
 	private Restaurante restaurante;
+	
+	private Integer quantidade;
+	
+	private String observacao;
 
 	public ItemCardapio(Long id) {
 		this.id = id;
+	}
+	
+	public ItemCardapio() {
+		
 	}
 }

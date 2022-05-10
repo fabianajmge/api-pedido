@@ -1,18 +1,12 @@
 package com.pederapido.pederapido.repository;
 
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.pederapido.pederapido.model.Mesa;
-import com.pederapido.pederapido.model.Pedido;
 
 @Repository
-public interface PedidoRepository extends JpaRepository<Pedido, Long> {
+public interface MesaRepository extends JpaRepository<Mesa, Long> {
 	
-	Optional<Pedido> findById(Long id);
-	
-	Pedido findByMesa(Mesa mesa);
 
 }

@@ -33,9 +33,14 @@ public class Mesa {
 	private String qrCode;
 	
 	@OneToOne(mappedBy = "mesa")
+	@JsonIgnore
 	private Pedido pedido;
 
 	public Mesa(Long id) {
 		this.id = id;
+	}
+	
+	public Mesa() {
+		
 	}
 }
