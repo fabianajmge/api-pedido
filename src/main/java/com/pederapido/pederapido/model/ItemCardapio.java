@@ -40,10 +40,6 @@ public class ItemCardapio {
 	@JoinColumn(name = "id_restaurante")
 	@JsonIgnore
 	private Restaurante restaurante;
-	
-	private Integer quantidade;
-	
-	private String observacao;
 
 	public ItemCardapio(Long id) {
 		this.id = id;

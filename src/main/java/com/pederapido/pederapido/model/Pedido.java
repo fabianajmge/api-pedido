@@ -1,6 +1,7 @@
 package com.pederapido.pederapido.model;
 
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,14 +11,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_pedido")
@@ -29,22 +31,31 @@ public class Pedido {
 	@Column(name = "id")
 	private Long id;
 
-	@ManyToMany
-	@JoinTable(name = "itens_pedido", joinColumns = @JoinColumn(name = "id_pedido"), inverseJoinColumns = @JoinColumn(name = "id_item_cardapio"))
-	private Set<ItemCardapio> itemCardapio;
+    @OneToMany(mappedBy = "pedido")
+	private List<ItemPedido> itensPedido;
 	
 	@Enumerated(EnumType.ORDINAL)
+	@Setter
 	private StatusPedido status;
 	
-	@OneToOne
-	@JoinColumn(name = "id_mesa", referencedColumnName = "id")
+	@NotNull
+    @ManyToOne(optional = false)
+	@JoinColumn(name = "id_mesa", nullable = false, referencedColumnName = "id")
 	@JsonIgnore
 	private Mesa mesa;
+	
+    @NotNull
+    @Column(name = "data_criacao", updatable = false, nullable = false)
+    private LocalDateTime dataCriacao;
+    
+    @Column(name = "data_conclusao")
+    private LocalDateTime dataConclusao;
 
-	public Pedido(Set<ItemCardapio> itemCardapio, StatusPedido status, Mesa mesa) {
-		this.itemCardapio = itemCardapio;
+	public Pedido(List<ItemPedido> itensPedido, StatusPedido status, Mesa mesa) {
+		this.itensPedido = itensPedido;
 		this.status = status;
 		this.mesa = mesa;
+		this.dataCriacao = LocalDateTime.now();
 	}
 	
 	public Pedido() {
