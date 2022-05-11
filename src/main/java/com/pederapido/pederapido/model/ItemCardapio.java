@@ -38,7 +38,6 @@ public class ItemCardapio {
 	
 	@ManyToOne
 	@JoinColumn(name = "id_restaurante")
-	@JsonIgnore
 	private Restaurante restaurante;
 
 	public ItemCardapio(Long id) {
