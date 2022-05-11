@@ -23,10 +23,34 @@ public class PedidoController {
 	@Autowired
 	private PedidoService pedidoService;
 	
-	@GetMapping
-	public ResponseEntity<List<PedidoDTO>> getPedidoPorMesa(@RequestParam(name = "mesaId") Long mesaId) {
+	@GetMapping(value = "/porMesa")
+	public ResponseEntity<List<PedidoDTO>> getPedidoPreparoFinalizadoPorMesa(@RequestParam(name = "mesaId") Long mesaId) {
 		HttpStatus status = HttpStatus.OK;
-		List<PedidoDTO> pedido = pedidoService.getPedidoPorMesa(mesaId);
+		List<PedidoDTO> pedido = pedidoService.getPedidoPreparoFinalizadoPorMesa(mesaId);
+		
+		if (pedido.isEmpty()) {
+			status = HttpStatus.NOT_FOUND;
+		}
+		
+		return new ResponseEntity<List<PedidoDTO>>(pedido, status);
+	}
+	
+	@GetMapping(value = "/emAberto")
+	public ResponseEntity<List<PedidoDTO>> getPedidosEmAberto(@RequestParam(name = "restauranteId") Long restauranteId) {
+		HttpStatus status = HttpStatus.OK;
+		List<PedidoDTO> pedido = pedidoService.getPedidosEmAberto(restauranteId);
+		
+		if (pedido.isEmpty()) {
+			status = HttpStatus.NOT_FOUND;
+		}
+		
+		return new ResponseEntity<List<PedidoDTO>>(pedido, status);
+	}
+	
+	@GetMapping(value = "/emPreparacao")
+	public ResponseEntity<List<PedidoDTO>> getPedidosEmPreparacao(@RequestParam(name = "restauranteId") Long restauranteId) {
+		HttpStatus status = HttpStatus.OK;
+		List<PedidoDTO> pedido = pedidoService.getPedidosEmPreparacao(restauranteId);
 		
 		if (pedido.isEmpty()) {
 			status = HttpStatus.NOT_FOUND;

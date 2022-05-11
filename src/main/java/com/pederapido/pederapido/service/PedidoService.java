@@ -14,11 +14,13 @@ import com.pederapido.pederapido.model.ItemPedido;
 import com.pederapido.pederapido.model.ItemPedidoId;
 import com.pederapido.pederapido.model.Mesa;
 import com.pederapido.pederapido.model.Pedido;
+import com.pederapido.pederapido.model.Restaurante;
 import com.pederapido.pederapido.model.StatusPedido;
 import com.pederapido.pederapido.repository.ItemCardapioRepository;
 import com.pederapido.pederapido.repository.ItemPedidoRepository;
 import com.pederapido.pederapido.repository.MesaRepository;
 import com.pederapido.pederapido.repository.PedidoRepository;
+import com.pederapido.pederapido.repository.RestauranteRepository;
 
 @Service
 public class PedidoService {
@@ -34,6 +36,9 @@ public class PedidoService {
 	
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	
+	@Autowired
+	private RestauranteRepository restauranteRepository;
 	
 	public void criarPedido(PedidoDTO pedidoEntrada) {
 		List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
@@ -59,7 +64,7 @@ public class PedidoService {
 		});
 	}
 
-	public List<PedidoDTO> getPedidoPorMesa(Long mesaId) {
+	public List<PedidoDTO> getPedidoPreparoFinalizadoPorMesa(Long mesaId) {
 		Optional<Mesa> mesa = mesaRepository.findById(mesaId);
 		List<PedidoDTO> listaPedidos = new ArrayList<PedidoDTO>();
 		
@@ -99,6 +104,64 @@ public class PedidoService {
 			pedidoRepository.save(pedidoAlterado);
 		}
 		
+	}
+	
+	public List<PedidoDTO> getPedidosEmAberto(Long restauranteId) {
+		Optional<Restaurante> restaurante = restauranteRepository.findById(restauranteId);
+		List<PedidoDTO> listaPedidos = new ArrayList<PedidoDTO>();
+		
+		if (restaurante.isPresent()) {
+			List<Pedido> pedidoRetornado = pedidoRepository.buscarPedidosEmAberto(restauranteId);
+			
+			if (pedidoRetornado != null) {
+				
+				pedidoRetornado.forEach(p -> {
+					List<ItemPedidoDTO> itens = new ArrayList<ItemPedidoDTO>();
+					p.getItensPedido().forEach(i -> {
+						ItemPedidoDTO item = new ItemPedidoDTO(i.getItemCardapio().getId(), 
+								i.getItemCardapio().getTitulo(), i.getItemCardapio().getPreco(), 
+								i.getObservacao(), i.getQuantidade());
+						
+						itens.add(item);
+					});
+					
+					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId());
+					listaPedidos.add(pedido);
+				});				
+				
+			}
+		}
+		
+		return listaPedidos;
+	}
+	
+	public List<PedidoDTO> getPedidosEmPreparacao(Long restauranteId) {
+		Optional<Restaurante> restaurante = restauranteRepository.findById(restauranteId);
+		List<PedidoDTO> listaPedidos = new ArrayList<PedidoDTO>();
+		
+		if (restaurante.isPresent()) {
+			List<Pedido> pedidoRetornado = pedidoRepository.buscarPedidosEmPreparacao(restauranteId);
+			
+			if (pedidoRetornado != null) {
+				
+				pedidoRetornado.forEach(p -> {
+					List<ItemPedidoDTO> itens = new ArrayList<ItemPedidoDTO>();
+					p.getItensPedido().forEach(i -> {
+						ItemPedidoDTO item = new ItemPedidoDTO(i.getItemCardapio().getId(), 
+								i.getItemCardapio().getTitulo(), i.getItemCardapio().getPreco(), 
+								i.getObservacao(), i.getQuantidade());
+						
+						itens.add(item);
+					});
+					
+					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId());
+					listaPedidos.add(pedido);
+				});				
+				
+			}
+		}
+		
+		return listaPedidos;
 	}
 
 }

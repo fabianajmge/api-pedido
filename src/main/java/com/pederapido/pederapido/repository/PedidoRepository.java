@@ -16,5 +16,11 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	
 	@Query("SELECT p FROM Pedido p WHERE p.mesa.id = ?1 AND p.status = 2")
 	List<Pedido> buscarPedidoFinalizadoPorMesa(Long idMesa);
+	
+	@Query("SELECT p FROM Pedido p WHERE p.mesa.restaurante.id = ?1 AND p.status = 0")
+	List<Pedido> buscarPedidosEmAberto(Long idRestaurante);
+	
+	@Query("SELECT p FROM Pedido p WHERE p.mesa.restaurante.id = ?1 AND p.status = 1")
+	List<Pedido> buscarPedidosEmPreparacao(Long idRestaurante);
 
 }
