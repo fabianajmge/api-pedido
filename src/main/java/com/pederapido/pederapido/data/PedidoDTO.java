@@ -12,5 +12,6 @@ public class PedidoDTO {
 	private List<ItemPedidoDTO> itensPedido;
 	private Long idMesa;
 	private Long idPedido;
+	private String status;
 
 }

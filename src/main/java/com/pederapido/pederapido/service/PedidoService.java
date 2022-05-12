@@ -53,15 +53,18 @@ public class PedidoService {
 			}
 		});
 		
-		Mesa mesa = new Mesa(pedidoEntrada.getIdMesa());
-		Pedido pedido = new Pedido(itensPedido, StatusPedido.ABERTO, mesa);
-		Pedido pedidoSalvo = pedidoRepository.save(pedido);
+		Optional<Mesa> mesa = mesaRepository.findById(pedidoEntrada.getIdMesa());
 		
-		itensPedido.forEach(item -> {
-			item.setId(new ItemPedidoId(pedidoSalvo.getId(), item.getItemCardapio().getId()));
-			item.setPedido(pedidoSalvo);
-			itemPedidoRepository.save(item);
-		});
+		if (!itensPedido.isEmpty() && mesa.isPresent()) {
+			Pedido pedido = new Pedido(itensPedido, StatusPedido.ABERTO, mesa.get());
+			Pedido pedidoSalvo = pedidoRepository.save(pedido);
+			
+			itensPedido.forEach(item -> {
+				item.setId(new ItemPedidoId(pedidoSalvo.getId(), item.getItemCardapio().getId()));
+				item.setPedido(pedidoSalvo);
+				itemPedidoRepository.save(item);
+			});
+		}
 	}
 
 	public List<PedidoDTO> getPedidoPreparoFinalizadoPorMesa(Long mesaId) {
@@ -83,7 +86,7 @@ public class PedidoService {
 						itens.add(item);
 					});
 					
-					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId());
+					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId(), p.getStatus().name());
 					listaPedidos.add(pedido);
 				});				
 				
@@ -125,7 +128,7 @@ public class PedidoService {
 						itens.add(item);
 					});
 					
-					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId());
+					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId(), p.getStatus().name());
 					listaPedidos.add(pedido);
 				});				
 				
@@ -154,7 +157,7 @@ public class PedidoService {
 						itens.add(item);
 					});
 					
-					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId());
+					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId(), p.getStatus().name());
 					listaPedidos.add(pedido);
 				});				
 				
