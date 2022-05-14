@@ -1,5 +1,6 @@
 package com.pederapido.pederapido.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pederapido.pederapido.data.PedidoDTO;
+import com.pederapido.pederapido.model.CriacaoProcesso;
 import com.pederapido.pederapido.service.PedidoService;
 
 @RestController
@@ -36,32 +38,21 @@ public class PedidoController {
 	}
 	
 	@GetMapping(value = "/emAberto")
-	public ResponseEntity<List<PedidoDTO>> getPedidosEmAberto(@RequestParam(name = "restauranteId") Long restauranteId) {
-		HttpStatus status = HttpStatus.OK;
-		List<PedidoDTO> pedido = pedidoService.getPedidosEmAberto(restauranteId);
-		
-		if (pedido.isEmpty()) {
-			status = HttpStatus.NOT_FOUND;
-		}
-		
-		return new ResponseEntity<List<PedidoDTO>>(pedido, status);
+	public ResponseEntity<CriacaoProcesso> getPedidosEmAberto() {
+		pedidoService.getPedidosEmAberto();
+		return new ResponseEntity<CriacaoProcesso>(new CriacaoProcesso(LocalDateTime.now()), HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/emPreparacao")
-	public ResponseEntity<List<PedidoDTO>> getPedidosEmPreparacao(@RequestParam(name = "restauranteId") Long restauranteId) {
-		HttpStatus status = HttpStatus.OK;
-		List<PedidoDTO> pedido = pedidoService.getPedidosEmPreparacao(restauranteId);
-		
-		if (pedido.isEmpty()) {
-			status = HttpStatus.NOT_FOUND;
-		}
-		
-		return new ResponseEntity<List<PedidoDTO>>(pedido, status);
+	public ResponseEntity<CriacaoProcesso> getPedidosEmPreparacao() {
+		pedidoService.getPedidosEmPreparacao();
+		return new ResponseEntity<CriacaoProcesso>(new CriacaoProcesso(LocalDateTime.now()), HttpStatus.OK);
 	}
 	
 	@PostMapping
 	public ResponseEntity<?> criarPedido(@RequestBody PedidoDTO pedido){
 		pedidoService.criarPedido(pedido);
+		pedidoService.atualizaTelaCozinha();
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
 	
@@ -69,6 +60,7 @@ public class PedidoController {
 	public ResponseEntity<?> atualizarStatusPedido(@RequestParam(name = "pedidoId") Long pedidoId, 
 			@RequestParam(name = "statusId") Integer statusId) {
 		pedidoService.atualizarStatusPedido(pedidoId, statusId);
+		pedidoService.atualizaTelaCozinha();
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 

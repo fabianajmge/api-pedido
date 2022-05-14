@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.pederapido.pederapido.data.ItemPedidoDTO;
@@ -14,16 +15,17 @@ import com.pederapido.pederapido.model.ItemPedido;
 import com.pederapido.pederapido.model.ItemPedidoId;
 import com.pederapido.pederapido.model.Mesa;
 import com.pederapido.pederapido.model.Pedido;
-import com.pederapido.pederapido.model.Restaurante;
 import com.pederapido.pederapido.model.StatusPedido;
 import com.pederapido.pederapido.repository.ItemCardapioRepository;
 import com.pederapido.pederapido.repository.ItemPedidoRepository;
 import com.pederapido.pederapido.repository.MesaRepository;
 import com.pederapido.pederapido.repository.PedidoRepository;
-import com.pederapido.pederapido.repository.RestauranteRepository;
 
 @Service
 public class PedidoService {
+	
+	@Autowired
+	private SimpMessagingTemplate template;
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -36,9 +38,6 @@ public class PedidoService {
 	
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
-	
-	@Autowired
-	private RestauranteRepository restauranteRepository;
 	
 	public void criarPedido(PedidoDTO pedidoEntrada) {
 		List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
@@ -86,7 +85,8 @@ public class PedidoService {
 						itens.add(item);
 					});
 					
-					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId(), p.getStatus().name());
+					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), 
+							p.getId(), p.getStatus().name(), p.getMesa().getRestaurante().getId());
 					listaPedidos.add(pedido);
 				});				
 				
@@ -109,62 +109,62 @@ public class PedidoService {
 		
 	}
 	
-	public List<PedidoDTO> getPedidosEmAberto(Long restauranteId) {
-		Optional<Restaurante> restaurante = restauranteRepository.findById(restauranteId);
+	public void getPedidosEmAberto() {
 		List<PedidoDTO> listaPedidos = new ArrayList<PedidoDTO>();
+		List<Pedido> pedidoRetornado = pedidoRepository.buscarPedidosEmAberto();
 		
-		if (restaurante.isPresent()) {
-			List<Pedido> pedidoRetornado = pedidoRepository.buscarPedidosEmAberto(restauranteId);
+		if (pedidoRetornado != null) {
 			
-			if (pedidoRetornado != null) {
-				
-				pedidoRetornado.forEach(p -> {
-					List<ItemPedidoDTO> itens = new ArrayList<ItemPedidoDTO>();
-					p.getItensPedido().forEach(i -> {
-						ItemPedidoDTO item = new ItemPedidoDTO(i.getItemCardapio().getId(), 
-								i.getItemCardapio().getTitulo(), i.getItemCardapio().getPreco(), 
-								i.getObservacao(), i.getQuantidade());
-						
-						itens.add(item);
-					});
+			pedidoRetornado.forEach(p -> {
+				List<ItemPedidoDTO> itens = new ArrayList<ItemPedidoDTO>();
+				p.getItensPedido().forEach(i -> {
+					ItemPedidoDTO item = new ItemPedidoDTO(i.getItemCardapio().getId(), 
+							i.getItemCardapio().getTitulo(), i.getItemCardapio().getPreco(), 
+							i.getObservacao(), i.getQuantidade());
 					
-					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId(), p.getStatus().name());
-					listaPedidos.add(pedido);
-				});				
+					itens.add(item);
+				});
 				
-			}
+				PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId(), 
+						p.getStatus().name(), p.getMesa().getRestaurante().getId());
+				listaPedidos.add(pedido);
+			});				
+			
 		}
 		
-		return listaPedidos;
+		template.convertAndSend("/emAberto", listaPedidos);
 	}
 	
-	public List<PedidoDTO> getPedidosEmPreparacao(Long restauranteId) {
-		Optional<Restaurante> restaurante = restauranteRepository.findById(restauranteId);
+	public void getPedidosEmPreparacao() {
 		List<PedidoDTO> listaPedidos = new ArrayList<PedidoDTO>();
 		
-		if (restaurante.isPresent()) {
-			List<Pedido> pedidoRetornado = pedidoRepository.buscarPedidosEmPreparacao(restauranteId);
+		List<Pedido> pedidoRetornado = pedidoRepository.buscarPedidosEmPreparacao();
+		
+		if (pedidoRetornado != null) {
 			
-			if (pedidoRetornado != null) {
-				
-				pedidoRetornado.forEach(p -> {
-					List<ItemPedidoDTO> itens = new ArrayList<ItemPedidoDTO>();
-					p.getItensPedido().forEach(i -> {
-						ItemPedidoDTO item = new ItemPedidoDTO(i.getItemCardapio().getId(), 
-								i.getItemCardapio().getTitulo(), i.getItemCardapio().getPreco(), 
-								i.getObservacao(), i.getQuantidade());
-						
-						itens.add(item);
-					});
+			pedidoRetornado.forEach(p -> {
+				List<ItemPedidoDTO> itens = new ArrayList<ItemPedidoDTO>();
+				p.getItensPedido().forEach(i -> {
+					ItemPedidoDTO item = new ItemPedidoDTO(i.getItemCardapio().getId(), 
+							i.getItemCardapio().getTitulo(), i.getItemCardapio().getPreco(), 
+							i.getObservacao(), i.getQuantidade());
 					
-					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId(), p.getStatus().name());
-					listaPedidos.add(pedido);
-				});				
+					itens.add(item);
+				});
 				
-			}
+				PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId(), 
+						p.getStatus().name(), p.getMesa().getRestaurante().getId());
+				listaPedidos.add(pedido);
+			});				
+			
 		}
 		
-		return listaPedidos;
+		template.convertAndSend("/emPreparacao", listaPedidos);
+	}
+	
+	public void atualizaTelaCozinha() {
+		getPedidosEmAberto();
+		getPedidosEmPreparacao();
 	}
 
 }

@@ -13,5 +13,6 @@ public class PedidoDTO {
 	private Long idMesa;
 	private Long idPedido;
 	private String status;
+	private Long idRestaurante;
 
 }
