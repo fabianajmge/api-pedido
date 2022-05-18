@@ -2,8 +2,8 @@ version: "3.7"
 
 services:
   aplicacao:
-    image: githubjenkins
+    image: api-pedido
     restart: always
     ports: 
       - "8084:8080"
-    container_name: githubjenkins
+    container_name: api-pedido
