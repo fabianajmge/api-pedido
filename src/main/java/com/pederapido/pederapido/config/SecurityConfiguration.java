@@ -23,7 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/**").authenticated()
 				.antMatchers("/h2-console/**").permitAll()
 //	            .anyRequest().authenticated()
-	            .and().cors().and().csrf().disable()
+	            .and().csrf().disable()
 	            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	            .and().headers().frameOptions().sameOrigin()
 				//.anyRequest().authenticated()

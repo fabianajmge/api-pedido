@@ -11,6 +11,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class CorsFilter implements Filter {
 	
 	private String originPermitida = "http://ec2-100-26-208-1.compute-1.amazonaws.com:8081";
