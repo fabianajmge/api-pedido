@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,7 +37,6 @@ public class PedidoController {
 		return new ResponseEntity<List<PedidoDTO>>(pedido, status);
 	}
 	
-	@CrossOrigin(origins = "http://ec2-100-26-208-1.compute-1.amazonaws.com:8081")
 	@GetMapping(value = "/emAberto")
 	public ResponseEntity<CriacaoProcesso> getPedidosEmAberto() {
 		pedidoService.getPedidosEmAberto();
