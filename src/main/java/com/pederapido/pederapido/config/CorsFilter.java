@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CorsFilter implements Filter {
 	
-	private String originPermitida = "http://ec2-3-84-159-181.compute-1.amazonaws.com:8081";
+	private String originPermitida = "http://ec2-44-203-156-186.compute-1.amazonaws.com:8081";
 //	private String originPermitida = "http://localhost:4200";
 
     @Override
