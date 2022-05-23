@@ -65,6 +65,16 @@ public class PedidoService {
 			});
 		}
 	}
+	
+	public boolean verificaSeMesaTemPedidoNaoFechado(Long idMesa) {
+		List<Pedido> listaPedidos = pedidoRepository.buscarPedidoNaoFechadoPorMesa(idMesa);
+		
+		if (!listaPedidos.isEmpty()) {
+			return true;
+		}
+		
+		return false;
+	}
 
 	public List<PedidoDTO> getPedidoPreparoFinalizadoPorMesa(Long mesaId) {
 		Optional<Mesa> mesa = mesaRepository.findById(mesaId);

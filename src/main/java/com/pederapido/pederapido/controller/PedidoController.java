@@ -51,9 +51,17 @@ public class PedidoController {
 	
 	@PostMapping
 	public ResponseEntity<?> criarPedido(@RequestBody PedidoDTO pedido){
-		pedidoService.criarPedido(pedido);
-		pedidoService.atualizaTelaCozinha();
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+		boolean mesaJaPossuiPedidoEmAtendimento = pedidoService.verificaSeMesaTemPedidoNaoFechado(pedido.getIdMesa());
+		HttpStatus status = HttpStatus.CREATED;
+		
+		if (!mesaJaPossuiPedidoEmAtendimento) {
+			pedidoService.criarPedido(pedido);
+			pedidoService.atualizaTelaCozinha();
+		} else {
+			status = HttpStatus.BAD_REQUEST;
+		}
+		
+        return new ResponseEntity<Void>(status);
     }
 	
 	@PutMapping
