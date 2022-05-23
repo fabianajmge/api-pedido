@@ -1,5 +1,6 @@
 package com.pederapido.pederapido.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -10,10 +11,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 	
+	@Autowired
+	private PedidoProperties properties;
+	
 	@Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/socket")
-                .setAllowedOrigins("http://ec2-44-203-156-186.compute-1.amazonaws.com:8081")
+                .setAllowedOrigins(properties.getOrigensPermitidas())
                 .withSockJS();
     }
 

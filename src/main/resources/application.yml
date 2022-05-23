@@ -1,3 +1,6 @@
+pederapido:
+  origenspermitidas: http://localhost:4200,http://ec2-44-203-156-186.compute-1.amazonaws.com:8081
+
 com: 
   kb: 
     jwt: 
@@ -20,4 +23,3 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
-    

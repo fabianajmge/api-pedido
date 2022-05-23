@@ -1,6 +1,7 @@
 package com.pederapido.pederapido.config;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,13 +12,14 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CorsFilter implements Filter {
 	
-	private String originPermitida = "http://ec2-44-203-156-186.compute-1.amazonaws.com:8081";
-//	private String originPermitida = "http://localhost:4200";
+	@Autowired
+	private PedidoProperties properties;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
@@ -25,11 +27,17 @@ public class CorsFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
+        String[] urlsPermitidas = properties.getOrigensPermitidas();
+        String urlCross = "";
+        
+        if (Arrays.asList(urlsPermitidas).contains(request.getHeader("Origin"))) {
+        	urlCross = request.getHeader("Origin");
+        }
 
-        response.setHeader("Access-Control-Allow-Origin", originPermitida);
+        response.setHeader("Access-Control-Allow-Origin", urlCross);
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
-        if ("OPTIONS".equals(request.getMethod()) && originPermitida.equals(request.getHeader("Origin"))) {
+        if ("OPTIONS".equals(request.getMethod()) && urlCross.equals(request.getHeader("Origin"))) {
             response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
             response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
             response.setHeader("Access-Control-Max-Age", "3600");
