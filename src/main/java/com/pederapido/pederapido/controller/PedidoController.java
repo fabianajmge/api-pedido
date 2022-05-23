@@ -71,5 +71,12 @@ public class PedidoController {
 		pedidoService.atualizaTelaCozinha();
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	@PutMapping(value = "/solicitarConta")
+	public ResponseEntity<?> solicitarConta(@RequestParam(name = "mesaId") Long mesaId, 
+			@RequestParam(name = "statusId") Integer statusId) {
+		pedidoService.solicitarConta(mesaId);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 
 }

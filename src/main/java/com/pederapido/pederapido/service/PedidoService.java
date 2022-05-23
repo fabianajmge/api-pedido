@@ -67,9 +67,9 @@ public class PedidoService {
 	}
 	
 	public boolean verificaSeMesaTemPedidoNaoFechado(Long idMesa) {
-		List<Pedido> listaPedidos = pedidoRepository.buscarPedidoNaoFechadoPorMesa(idMesa);
+		Optional<Pedido> pedido = pedidoRepository.buscarPedidoNaoFechadoPorMesa(idMesa);
 		
-		if (!listaPedidos.isEmpty()) {
+		if (pedido.isPresent()) {
 			return true;
 		}
 		
@@ -175,6 +175,14 @@ public class PedidoService {
 	public void atualizaTelaCozinha() {
 		getPedidosEmAberto();
 		getPedidosEmPreparacao();
+	}
+
+	public void solicitarConta(Long mesaId) {
+		Optional<Pedido> pedido = pedidoRepository.buscarPedidoNaoFechadoPorMesa(mesaId);
+		
+		if (pedido.isPresent()) {
+			atualizarStatusPedido(pedido.get().getId(), StatusPedido.CONTA_SOLICITADA.getValue());
+		}
 	}
 
 }
