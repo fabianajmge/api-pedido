@@ -19,14 +19,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.headers().cacheControl();
 		http.csrf().disable()
 				.authorizeRequests()
-				.antMatchers("**/health").permitAll()
-				.antMatchers("/api/**").authenticated()
-				.antMatchers("/h2-console/**").permitAll()
-//	            .anyRequest().authenticated()
+				.antMatchers("/h2-console/**", "/cardapio/**", "/pedido", "/pedido/solicitarConta").permitAll()
+	            .anyRequest().authenticated()
 	            .and().csrf().disable()
 	            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	            .and().headers().frameOptions().sameOrigin()
-				//.anyRequest().authenticated()
 				.and()
 				.addFilterBefore(awsCognitoJwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}

@@ -79,8 +79,7 @@ public class PedidoController {
 	}
 	
 	@PutMapping(value = "/solicitarConta")
-	public ResponseEntity<?> solicitarConta(@RequestParam(name = "mesaId") Long mesaId, 
-			@RequestParam(name = "statusId") Integer statusId) {
+	public ResponseEntity<?> solicitarConta(@RequestParam(name = "mesaId") Long mesaId) {
 		pedidoService.solicitarConta(mesaId);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
