@@ -25,5 +25,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	
 	@Query("SELECT p FROM Pedido p WHERE p.mesa.id = ?1 AND p.status != 4")
 	Optional<Pedido> buscarPedidoNaoFechadoPorMesa(Long idMesa);
+	
+	@Query("SELECT p FROM Pedido p WHERE p.status = 3")
+	List<Pedido> buscarPedidosContaSolicitada();
 
 }

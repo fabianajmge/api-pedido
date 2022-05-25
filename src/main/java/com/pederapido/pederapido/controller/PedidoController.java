@@ -1,7 +1,6 @@
 package com.pederapido.pederapido.controller;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,15 +25,15 @@ public class PedidoController {
 	private PedidoService pedidoService;
 	
 	@GetMapping(value = "/porMesa")
-	public ResponseEntity<List<PedidoDTO>> getPedidoPreparoFinalizadoPorMesa(@RequestParam(name = "mesaId") Long mesaId) {
+	public ResponseEntity<PedidoDTO> getPedidoPreparoFinalizadoPorMesa(@RequestParam(name = "mesaId") Long mesaId) {
 		HttpStatus status = HttpStatus.OK;
-		List<PedidoDTO> pedido = pedidoService.getPedidoPreparoFinalizadoPorMesa(mesaId);
+		PedidoDTO pedido = pedidoService.getPedidoMesa(mesaId);
 		
-		if (pedido.isEmpty()) {
+		if (pedido == null) {
 			status = HttpStatus.NOT_FOUND;
 		}
 		
-		return new ResponseEntity<List<PedidoDTO>>(pedido, status);
+		return new ResponseEntity<PedidoDTO>(pedido, status);
 	}
 	
 	@GetMapping(value = "/emAberto")
@@ -46,6 +45,12 @@ public class PedidoController {
 	@GetMapping(value = "/emPreparacao")
 	public ResponseEntity<CriacaoProcesso> getPedidosEmPreparacao() {
 		pedidoService.getPedidosEmPreparacao();
+		return new ResponseEntity<CriacaoProcesso>(new CriacaoProcesso(LocalDateTime.now()), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/contaSolicitada")
+	public ResponseEntity<CriacaoProcesso> getPedidosContaSolicitada() {
+		pedidoService.getPedidosContaSolicitada();
 		return new ResponseEntity<CriacaoProcesso>(new CriacaoProcesso(LocalDateTime.now()), HttpStatus.OK);
 	}
 	
@@ -69,6 +74,7 @@ public class PedidoController {
 			@RequestParam(name = "statusId") Integer statusId) {
 		pedidoService.atualizarStatusPedido(pedidoId, statusId);
 		pedidoService.atualizaTelaCozinha();
+		pedidoService.atualizaTelaGarcom();
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	

@@ -183,6 +183,60 @@ public class PedidoService {
 		if (pedido.isPresent()) {
 			atualizarStatusPedido(pedido.get().getId(), StatusPedido.CONTA_SOLICITADA.getValue());
 		}
+		
+		getPedidosContaSolicitada();
 	}
-
+	
+	public PedidoDTO getPedidoMesa(Long mesaId) {		
+		Optional<Pedido> pedidoRetornado = pedidoRepository.buscarPedidoNaoFechadoPorMesa(mesaId);
+		PedidoDTO pedido = null;
+		
+		if (pedidoRetornado.isPresent()) {
+			List<ItemPedidoDTO> itens = new ArrayList<ItemPedidoDTO>();
+			pedidoRetornado.get().getItensPedido().forEach(i -> {
+				ItemPedidoDTO item = new ItemPedidoDTO(i.getItemCardapio().getId(), 
+						i.getItemCardapio().getTitulo(), i.getItemCardapio().getPreco(), 
+						i.getObservacao(), i.getQuantidade());
+				
+				itens.add(item);
+			});
+			
+			pedido = new PedidoDTO(itens, pedidoRetornado.get().getMesa().getId(), 
+					pedidoRetornado.get().getId(), pedidoRetornado.get().getStatus().name(), 
+					pedidoRetornado.get().getMesa().getRestaurante().getId());
+		}
+		
+		return pedido;
+	}
+	
+	public void atualizaTelaGarcom() {
+		getPedidosContaSolicitada();
+	}
+	
+	public void getPedidosContaSolicitada() {
+		List<PedidoDTO> listaPedidos = new ArrayList<PedidoDTO>();
+		
+		List<Pedido> pedidoRetornado = pedidoRepository.buscarPedidosContaSolicitada();
+		
+		if (pedidoRetornado != null) {
+			
+			pedidoRetornado.forEach(p -> {
+				List<ItemPedidoDTO> itens = new ArrayList<ItemPedidoDTO>();
+				p.getItensPedido().forEach(i -> {
+					ItemPedidoDTO item = new ItemPedidoDTO(i.getItemCardapio().getId(), 
+							i.getItemCardapio().getTitulo(), i.getItemCardapio().getPreco(), 
+							i.getObservacao(), i.getQuantidade());
+					
+					itens.add(item);
+				});
+				
+				PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), p.getId(), 
+						p.getStatus().name(), p.getMesa().getRestaurante().getId());
+				listaPedidos.add(pedido);
+			});				
+			
+		}
+		
+		template.convertAndSend("/contaSolicitada", pedidoRetornado);
+	}
 }
