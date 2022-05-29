@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.pederapido.pederapido.data.ItemPedidoDTO;
@@ -24,8 +23,8 @@ import com.pederapido.pederapido.repository.PedidoRepository;
 @Service
 public class PedidoService {
 	
-	@Autowired
-	private SimpMessagingTemplate template;
+//	@Autowired
+//	private SimpMessagingTemplate template;
 	
 	@Autowired
 	private PedidoRepository pedidoRepository;
@@ -38,6 +37,9 @@ public class PedidoService {
 	
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	
+	@Autowired
+	private WebSocketService webSocketService;
 	
 	public void criarPedido(PedidoDTO pedidoEntrada) {
 		List<ItemPedido> itensPedido = new ArrayList<ItemPedido>();
@@ -142,7 +144,9 @@ public class PedidoService {
 			
 		}
 		
-		template.convertAndSend("/emAberto", listaPedidos);
+//		template.convertAndSend("/emAberto", listaPedidos);
+		
+		webSocketService.atualizacaoPedidos(listaPedidos, "/emAberto");
 	}
 	
 	public void getPedidosEmPreparacao() {
@@ -169,7 +173,9 @@ public class PedidoService {
 			
 		}
 		
-		template.convertAndSend("/emPreparacao", listaPedidos);
+//		template.convertAndSend("/emPreparacao", listaPedidos);
+		
+		webSocketService.atualizacaoPedidos(listaPedidos, "/emPreparacao");
 	}
 	
 	public void atualizaTelaCozinha() {
@@ -181,7 +187,7 @@ public class PedidoService {
 		Optional<Pedido> pedido = pedidoRepository.buscarPedidoNaoFechadoPorMesa(mesaId);
 		
 		if (pedido.isPresent()) {
-			atualizarStatusPedido(pedido.get().getId(), StatusPedido.CONTA_SOLICITADA.getValue());
+			atualizarStatusPedido(pedido.get().getId(), StatusPedido.CONTA_SOLICITADA.getValue() - 1);
 		}
 		
 		getPedidosContaSolicitada();
@@ -237,6 +243,7 @@ public class PedidoService {
 			
 		}
 		
-		template.convertAndSend("/contaSolicitada", pedidoRetornado);
+//		template.convertAndSend("/contaSolicitada", listaPedidos);
+		webSocketService.atualizacaoPedidos(listaPedidos, "/contaSolicitada");
 	}
 }

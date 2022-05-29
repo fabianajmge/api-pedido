@@ -31,6 +31,7 @@ public class Pedido {
 	@Column(name = "id")
 	private Long id;
 
+	@JsonIgnore
     @OneToMany(mappedBy = "pedido")
 	private List<ItemPedido> itensPedido;
 	
