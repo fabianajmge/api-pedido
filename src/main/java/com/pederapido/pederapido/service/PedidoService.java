@@ -144,8 +144,6 @@ public class PedidoService {
 			
 		}
 		
-//		template.convertAndSend("/emAberto", listaPedidos);
-		
 		webSocketService.atualizacaoPedidos(listaPedidos, "/emAberto");
 	}
 	
@@ -243,7 +241,11 @@ public class PedidoService {
 			
 		}
 		
-//		template.convertAndSend("/contaSolicitada", listaPedidos);
 		webSocketService.atualizacaoPedidos(listaPedidos, "/contaSolicitada");
+	}
+	
+	public boolean pedidoAbertoMesa(Long mesaId) {
+		Optional<Pedido> pedido = pedidoRepository.buscarPedidoNaoFechadoPorMesa(mesaId);	
+		return pedido.isPresent();
 	}
 }

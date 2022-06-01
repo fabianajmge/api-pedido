@@ -2,12 +2,15 @@ package com.pederapido.pederapido.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pederapido.pederapido.data.RestauranteDTO;
+import com.pederapido.pederapido.model.Mesa;
 import com.pederapido.pederapido.model.Restaurante;
+import com.pederapido.pederapido.repository.MesaRepository;
 import com.pederapido.pederapido.repository.RestauranteRepository;
 
 @Service
@@ -15,6 +18,9 @@ public class RestauranteService {
 	
 	@Autowired
 	private RestauranteRepository restauranteRepository;
+	
+	@Autowired
+	private MesaRepository mesaRepository;
 	
 	public List<RestauranteDTO> getRestaurantes() {
 		List<Restaurante> restaurantesPesquisa = restauranteRepository.findAll();
@@ -28,6 +34,18 @@ public class RestauranteService {
 		}
 		
 		return restaurantes;
+	}
+	
+	public RestauranteDTO getRestauranteMesa(Long idMesa) {
+		Optional<Mesa> mesa = mesaRepository.findById(idMesa);
+		RestauranteDTO restaurante = null;
+		
+		if (mesa.isPresent()) {
+			restaurante = new RestauranteDTO(mesa.get().getRestaurante().getId()
+					, mesa.get().getRestaurante().getNome());
+		}
+		
+		return restaurante;
 	}
 
 }
