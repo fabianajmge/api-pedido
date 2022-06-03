@@ -33,7 +33,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.csrf().disable()
 				.authorizeRequests()
 				.antMatchers("/h2-console/**", "/cardapio/**", "/pedido", "/pedido/solicitarConta", 
-						"/socket/**", "/pedido/pedidoAbertoMesa/**", "/restaurante/restauranteMesa/**").permitAll()
+						"/socket/**", "/pedido/pedidoAbertoMesa/**", "/restaurante/restauranteMesa/**",
+						"/swagger-ui.html", "/webjars/**", "/v2/api-docs", "/swagger-resources/**").permitAll()
 	            .anyRequest().authenticated()
 	            .and().csrf().disable()
 	            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

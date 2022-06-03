@@ -13,13 +13,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pederapido.pederapido.data.ItemCardapioDTO;
 import com.pederapido.pederapido.service.CardapioService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(value = "/cardapio")
+@Api(value = "Cardapio")
 public class CardapioController {
 	
 	@Autowired
 	private CardapioService cardapioService;
 
+	@ApiOperation(value = "Lista itens do cardapio")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Sucesso", response = ItemCardapioDTO[].class),
+			@ApiResponse(code = 404, message = "Não encontrado")
+	})
 	@GetMapping(value = "/{restauranteId}")
     public ResponseEntity<List<ItemCardapioDTO>> getCardapio(@PathVariable Long restauranteId){
 		HttpStatus status = HttpStatus.OK;

@@ -23,9 +23,6 @@ import com.pederapido.pederapido.repository.PedidoRepository;
 @Service
 public class PedidoService {
 	
-//	@Autowired
-//	private SimpMessagingTemplate template;
-	
 	@Autowired
 	private PedidoRepository pedidoRepository;
 	

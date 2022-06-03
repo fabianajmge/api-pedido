@@ -13,13 +13,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pederapido.pederapido.data.RestauranteDTO;
 import com.pederapido.pederapido.service.RestauranteService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(value = "/restaurante")
+@Api(value = "Restaurante")
 public class RestauranteController {
 	
 	@Autowired
 	RestauranteService restauranteService;
 	
+	@ApiOperation(value = "Lista restaurantes")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Sucesso", response = RestauranteDTO[].class),
+			@ApiResponse(code = 404, message = "Não encontrado")
+	})
 	@GetMapping(value = "/restaurantes")
 	public ResponseEntity<List<RestauranteDTO>> getRestaurantes() {
 		HttpStatus status = HttpStatus.OK;
@@ -32,6 +43,11 @@ public class RestauranteController {
 		return new ResponseEntity<List<RestauranteDTO>>(restaurantes, status);
 	}
 	
+	@ApiOperation(value = "Lista restaurantes")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Sucesso", response = RestauranteDTO[].class),
+			@ApiResponse(code = 404, message = "Não encontrado")
+	})
 	@GetMapping(value = "/restauranteMesa/{idMesa}")
 	public ResponseEntity<RestauranteDTO> getRestauranteMesa(@PathVariable Long idMesa) {
 		HttpStatus status = HttpStatus.OK;
