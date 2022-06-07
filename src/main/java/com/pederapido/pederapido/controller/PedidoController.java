@@ -103,9 +103,9 @@ public class PedidoController {
 			@ApiResponse(code = 200, message = "Sucesso"),
 	})
 	@PutMapping
-	public ResponseEntity<?> atualizarStatusPedido(@RequestParam(name = "pedidoId") Long pedidoId, 
+	public ResponseEntity<?> atualizarStatusPedido(@RequestParam(name = "pedidoId") Integer pedidoId, 
 			@RequestParam(name = "statusId") Integer statusId) {
-		pedidoService.atualizarStatusPedido(pedidoId, statusId);
+		pedidoService.atualizarStatusPedido(Long.parseLong(pedidoId.toString()), statusId);
 		pedidoService.atualizaTelaCozinha();
 		pedidoService.atualizaTelaGarcom();
 		return new ResponseEntity<Void>(HttpStatus.OK);

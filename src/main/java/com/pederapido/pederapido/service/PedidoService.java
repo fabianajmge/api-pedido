@@ -168,8 +168,6 @@ public class PedidoService {
 			
 		}
 		
-//		template.convertAndSend("/emPreparacao", listaPedidos);
-		
 		webSocketService.atualizacaoPedidos(listaPedidos, "/emPreparacao");
 	}
 	
