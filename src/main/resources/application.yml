@@ -1,5 +1,5 @@
 pederapido:
-  origenspermitidas: http://localhost:4200,http://ec2-44-203-156-186.compute-1.amazonaws.com:8081
+  origenspermitidas: http://localhost:4200,http://ec2-44-203-56-241.compute-1.amazonaws.com:8081
   
 url-websocket: http://52.70.86.211:8090/websocket
 
@@ -20,6 +20,8 @@ spring:
     console:
       enabled: true
       path: /h2-console
+      settings:
+        web-allow-others: true
       
   jpa:
     defer-datasource-initialization: true
