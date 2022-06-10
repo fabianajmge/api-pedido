@@ -23,11 +23,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pederapido.pederapido.data.ItemPedidoDTO;
-import com.pederapido.pederapido.data.PedidoDTO;
-import com.pederapido.pederapido.data.RestauranteDTO;
-import com.pederapido.pederapido.service.CardapioService;
-import com.pederapido.pederapido.service.RestauranteService;
+import com.pederapido.data.ItemPedidoDTO;
+import com.pederapido.data.PedidoDTO;
+import com.pederapido.data.RestauranteDTO;
+import com.pederapido.service.CardapioService;
+import com.pederapido.service.RestauranteService;
 
 @SpringBootTest(classes = {TestSecurityConfiguration.class})
 @WebAppConfiguration
