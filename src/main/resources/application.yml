@@ -1,7 +1,7 @@
 pederapido:
   origenspermitidas: http://localhost:4200,http://ec2-44-203-156-186.compute-1.amazonaws.com:8081
   
-url-websocket: http://localhost:8090/websocket
+url-websocket: http://52.70.86.211:8090/websocket
 
 com: 
   kb: 
