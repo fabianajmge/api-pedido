@@ -75,36 +75,6 @@ public class PedidoService {
 		return false;
 	}
 
-	public List<PedidoDTO> getPedidoPreparoFinalizadoPorMesa(Long mesaId) {
-		Optional<Mesa> mesa = mesaRepository.findById(mesaId);
-		List<PedidoDTO> listaPedidos = new ArrayList<PedidoDTO>();
-		
-		if (mesa.isPresent()) {
-			List<Pedido> pedidoRetornado = pedidoRepository.buscarPedidoFinalizadoPorMesa(mesa.get().getId());
-			
-			if (pedidoRetornado != null) {
-				
-				pedidoRetornado.forEach(p -> {
-					List<ItemPedidoDTO> itens = new ArrayList<ItemPedidoDTO>();
-					p.getItensPedido().forEach(i -> {
-						ItemPedidoDTO item = new ItemPedidoDTO(i.getItemCardapio().getId(), 
-								i.getItemCardapio().getTitulo(), i.getItemCardapio().getPreco(), 
-								i.getObservacao(), i.getQuantidade());
-						
-						itens.add(item);
-					});
-					
-					PedidoDTO pedido = new PedidoDTO(itens, p.getMesa().getId(), 
-							p.getId(), p.getStatus().name(), p.getMesa().getRestaurante().getId());
-					listaPedidos.add(pedido);
-				});				
-				
-			}
-		}
-		
-		return listaPedidos;
-	}
-
 	public void atualizarStatusPedido(Long pedidoId, Integer statusId) {
 		Pedido pedidoAlterado = new Pedido();
 		Optional<Pedido> pedido = pedidoRepository.findById(pedidoId);
